@@ -1,10 +1,11 @@
 module testCenterApi
+
 go 1.23.0
 
 toolchain go1.24.2
 
 require (
-	github.com/gin-contrib/cors v1.7.2
+	github.com/gin-contrib/cors v1.7.5
 	github.com/gin-gonic/gin v1.10.0
 	github.com/swaggo/files v1.0.1
 	github.com/swaggo/gin-swagger v1.6.0

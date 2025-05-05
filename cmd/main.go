@@ -6,6 +6,7 @@ import (
 	"testCenterApi/db"
 	"testCenterApi/docs" // import generated docs
 	"testCenterApi/routes"
+	"time"
 
 	"github.com/gin-contrib/cors" // CORS middleware
 	"github.com/gin-gonic/gin"
@@ -20,17 +21,31 @@ import (
 // @BasePath /
 
 func main() {
+	hostname := os.Getenv("HOSTNAME")
+	if hostname == "" {
+		hostname = "localhost"
+	}
 	// programmatically set swagger info
 	docs.SwaggerInfo.Title = "Test Center API"
 	docs.SwaggerInfo.Description = "This is a simple API for creating crud transactions."
 	docs.SwaggerInfo.Version = "1.0"
-	docs.SwaggerInfo.Host = os.Getenv("HOSTNAME")
+	docs.SwaggerInfo.Host = hostname
 	docs.SwaggerInfo.BasePath = "/"
 
 	db.ConnectDatabase()
 
 	router := gin.Default()
-	router.Use(cors.Default()) // Use default CORS settings
+	router.Use(cors.New(cors.Config{
+		AllowOrigins: []string{
+			"http://" + hostname,
+			"https://" + hostname,
+		},
+		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+		AllowHeaders:     []string{"Origin", "Content-Type", "Authorization"},
+		ExposeHeaders:    []string{"Content-Length"},
+		AllowCredentials: true,
+		MaxAge:           12 * time.Hour,
+	}))
 	// Serve Swagger UI at /docs
 	router.GET("/docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	router.GET("/docs", func(c *gin.Context) {
