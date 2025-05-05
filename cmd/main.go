@@ -2,6 +2,7 @@ package main
 
 import (
 	"net/http"
+	"os"
 	"testCenterApi/db"
 	"testCenterApi/docs" // import generated docs
 	"testCenterApi/routes"
@@ -23,7 +24,7 @@ func main() {
 	docs.SwaggerInfo.Title = "Test Center API"
 	docs.SwaggerInfo.Description = "This is a simple API for creating crud transactions."
 	docs.SwaggerInfo.Version = "1.0"
-	docs.SwaggerInfo.Host = "172.23.95.0:8123"
+	docs.SwaggerInfo.Host = os.Getenv("HOSTNAME")
 	docs.SwaggerInfo.BasePath = "/"
 
 	db.ConnectDatabase()
