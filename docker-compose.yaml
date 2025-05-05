@@ -14,7 +14,7 @@ services:
     build: .
     container_name: testcenter-api
     ports:
-      - "127.0.0.1:8181:8080"
+      - "127.0.0.1:8181:8123"
     depends_on:
       - postgres
     env_file: .env
