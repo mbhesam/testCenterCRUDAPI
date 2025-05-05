@@ -36,15 +36,17 @@ func main() {
 
 	router := gin.Default()
 	router.Use(cors.New(cors.Config{
-		AllowOrigins: []string{
-			"http://" + hostname,
-			"https://" + hostname,
-		},
+		//AllowOrigins: []string{
+		//	"http://" + hostname,
+		//	"https://" + hostname,
+		//},
+		AllowAllOrigins:  true,
+		AllowCredentials: false, // Must be false when AllowAllOrigins is true
 		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
 		AllowHeaders:     []string{"Origin", "Content-Type", "Authorization"},
 		ExposeHeaders:    []string{"Content-Length"},
-		AllowCredentials: true,
-		MaxAge:           12 * time.Hour,
+		//AllowCredentials: true,
+		MaxAge: 12 * time.Hour,
 	}))
 	// Serve Swagger UI at /docs
 	router.GET("/docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
