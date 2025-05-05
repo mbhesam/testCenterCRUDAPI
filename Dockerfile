@@ -1,26 +1,31 @@
-# Use a minimal base image
-FROM docker.arvancloud.ir/golang:1.24-alpine
+# Use a small base image
+FROM docker.arvancloud.ir/golang:1.24-alpine AS builder
 
-# Set environment variables
 ENV CGO_ENABLED=0 \
     GOOS=linux \
     GOARCH=amd64
 
-# Set working directory
 WORKDIR /app
 
-# Install Git (needed for go mod) and ca-certificates
+# Install git and certs for Go module resolution
 RUN apk add --no-cache git ca-certificates && update-ca-certificates
 
-# Copy go.mod and go.sum
+# Copy go.mod and go.sum and download deps
 COPY go.mod go.sum ./
 RUN go mod download
 
-# Copy source
+# Copy the whole project
 COPY . .
 
-# Build the Go binary
-RUN go build -o app .
+# Build the binary from cmd/main.go
+RUN go build -o app ./cmd/main.go
 
-# Run the compiled binary
+# Use a tiny final image
+FROM docker.arvancloud.ir/alpine:latest
+WORKDIR /root/
+
+COPY --from=builder /app/app .
+
+EXPOSE 8080
+
 CMD ["./app"]
