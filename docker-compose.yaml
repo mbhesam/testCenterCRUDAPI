@@ -16,5 +16,5 @@ services:
     ports:
       - "127.0.0.1:8181:8080"
     depends_on:
-      - db
+      - postgres
     env_file: .env
