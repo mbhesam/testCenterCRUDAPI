@@ -1,5 +1,5 @@
 # Use a minimal base image
-FROM docker.arvancloud.ir/golang:1.21-alpine
+FROM docker.arvancloud.ir/golang:1.24-alpine
 
 # Set environment variables
 ENV CGO_ENABLED=0 \
