@@ -1,0 +1,20 @@
+version: '3.5'
+
+services:
+  postgres:
+    container_name: postgres_container_test_center_api
+    image: docker.arvancloud.ir/postgres:17.4
+    env_file: .env
+    volumes:
+      - ../volumes/testCenterApi/postgres/data/postgres:/data/postgres
+    ports:
+      - "9994:5432"
+    restart: unless-stopped
+  api:
+    build: .
+    container_name: testcenter-api
+    ports:
+      - "127.0.0.1:8181:8080"
+    depends_on:
+      - db
+    env_file: .env

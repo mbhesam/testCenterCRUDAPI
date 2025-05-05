@@ -1,0 +1,307 @@
+basePath: /
+definitions:
+  routes.CreateQuestionRequest:
+    properties:
+      answers:
+        example:
+        - 0
+        - 1
+        - 2
+        items:
+          type: integer
+        type: array
+      options:
+        example:
+        - 10.0.0.0 – 10.255.255.255
+        - 172.16.0.0 – 172.31.255.255
+        - 192.168.0.0 – 192.168.255.255
+        - 169.254.0.0 – 169.254.255.255
+        items:
+          type: string
+        type: array
+      question:
+        example: Which of the following are valid IPv4 private address ranges?
+        type: string
+    type: object
+  routes.CreateTableRequest:
+    properties:
+      category:
+        description: like "ccna"
+        example: ccnp
+        type: string
+    required:
+    - category
+    type: object
+  routes.DeleteCategoryTableRequest:
+    properties:
+      category:
+        example: ccnp
+        type: string
+    required:
+    - category
+    type: object
+  routes.DeleteQuestionRequest:
+    properties:
+      id:
+        example: 1
+        type: integer
+    required:
+    - id
+    type: object
+  routes.ReadQuestionRequest:
+    properties:
+      include:
+        description: Optional filter substring
+        example: private
+        type: string
+    type: object
+  routes.UpdateQuestionRequest:
+    properties:
+      answers:
+        example:
+        - 0
+        - 1
+        - 2
+        items:
+          type: integer
+        type: array
+      id:
+        example: 1
+        type: integer
+      options:
+        example:
+        - 10.0.0.0 – 10.255.255.255
+        - 172.16.0.0 – 172.31.255.255
+        - 192.168.0.0 – 192.168.255.255
+        - 169.254.0.0 – 169.254.255.255
+        items:
+          type: string
+        type: array
+      question:
+        example: Which of the following are valid IPv4 private address ranges?
+        type: string
+    required:
+    - id
+    type: object
+host: localhost:8123
+info:
+  contact: {}
+  description: This is a simple API for creating crud transactions..
+  title: Test Center API
+  version: "1.0"
+paths:
+  /v1/table/{category}/question/create:
+    post:
+      consumes:
+      - application/json
+      description: Create a question with dynamic options and answers
+      parameters:
+      - description: Category name
+        in: path
+        name: category
+        required: true
+        type: string
+      - description: Question Input
+        in: body
+        name: createQuestion
+        required: true
+        schema:
+          $ref: '#/definitions/routes.CreateQuestionRequest'
+      - description: Question Input
+        in: body
+        name: createQuestion
+        required: true
+        schema:
+          $ref: '#/definitions/routes.CreateQuestionRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Create a new question in a category
+      tags:
+      - questions
+  /v1/table/{category}/question/delete:
+    post:
+      consumes:
+      - application/json
+      description: Deletes a question from a specific category table
+      parameters:
+      - description: Category name
+        in: path
+        name: category
+        required: true
+        type: string
+      - description: Delete Input
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/routes.DeleteQuestionRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Delete a question by ID
+      tags:
+      - questions
+  /v1/table/{category}/question/read:
+    post:
+      consumes:
+      - application/json
+      description: Fetches questions from a category table, optionally filtered by
+        substring match in question
+      parameters:
+      - description: Category name
+        in: path
+        name: category
+        required: true
+        type: string
+      - description: Optional Include Filter
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/routes.ReadQuestionRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Read all questions from a category table
+      tags:
+      - questions
+  /v1/table/{category}/question/update:
+    post:
+      consumes:
+      - application/json
+      description: Updates question text, options, and answers by ID
+      parameters:
+      - description: Category name
+        in: path
+        name: category
+        required: true
+        type: string
+      - description: Question Update Input
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/routes.UpdateQuestionRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Update a question in a category table
+      tags:
+      - questions
+  /v1/table/create:
+    post:
+      consumes:
+      - application/json
+      description: Create a new category as a dynamic table
+      parameters:
+      - description: Category Input
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/routes.CreateTableRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Create a new category table
+      tags:
+      - categories
+  /v1/table/delete:
+    post:
+      consumes:
+      - application/json
+      description: Drops a table belonging to a specific category (like "ccna", "ccnp")
+      parameters:
+      - description: Category Input
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/routes.DeleteCategoryTableRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Delete a category table
+      tags:
+      - categories
+  /v1/table/read:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve all user-created question category tables
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              items:
+                type: string
+              type: array
+            type: object
+      summary: List all question category tables
+      tags:
+      - categories
+swagger: "2.0"
